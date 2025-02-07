@@ -80,4 +80,20 @@ public class BinaryAPIControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().string("0000"));
     }
+	// Edge Case: Adding two binary numbers of different lengths
+	@Test
+	public void addWithDifferentLengthOperands() throws Exception {
+	    this.mvc.perform(get("/add").param("operand1", "101").param("operand2", "10011"))
+	        .andExpect(status().isOk())
+	        .andExpect(content().string("11000"));
+	}
+	
+	// Edge Case: Multiplying two binary numbers where one is "1" (identity element)
+	@Test
+	public void multiplyWithOne() throws Exception {
+	    this.mvc.perform(get("/multiply").param("operand1", "1").param("operand2", "1010"))
+	        .andExpect(status().isOk())
+	        .andExpect(content().string("1010"));
+	}
+
 }
