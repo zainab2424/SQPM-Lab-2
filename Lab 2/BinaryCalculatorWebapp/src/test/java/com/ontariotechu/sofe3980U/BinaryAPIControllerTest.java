@@ -59,4 +59,25 @@ public class BinaryAPIControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().string("1111"));
     }
+    // Edge Case: One operand is zero
+    @Test
+    public void multiplyWithZero() throws Exception {
+        this.mvc.perform(get("/multiply").param("operand1", "0").param("operand2", "10"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("0"));
+    }
+    // Edge Case: Binary operands of different lengths
+    @Test
+    public void bitwiseAndWithDifferentLengthOperands() throws Exception {
+        this.mvc.perform(get("/and").param("operand1", "1111").param("operand2", "11"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("0011"));
+    }
+    // Edge Case: Both operands are zero (binary all zeros)
+    @Test
+    public void bitwiseOrWithZeros() throws Exception {
+        this.mvc.perform(get("/or").param("operand1", "0000").param("operand2", "0000"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("0000"));
+    }
 }
