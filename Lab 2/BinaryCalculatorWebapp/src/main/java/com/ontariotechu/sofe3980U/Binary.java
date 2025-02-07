@@ -19,30 +19,17 @@ public class Binary
 		}
 	
 		// Validate the binary string (only '0' or '1' allowed)
-		for (int i = 0; i < number.length(); i++) {
-			char ch = number.charAt(i);
+		for (char ch : number.toCharArray()) {
 			if (ch != '0' && ch != '1') {
 				this.number = "0"; // Default to "0" for invalid input
 				return;
 			}
 		}
 	
-		// Remove leading zeros
-		int beg;
-		for (beg = 0; beg < number.length(); beg++) {
-			if (number.charAt(beg) != '0') {
-				break;
-			}
-		}
-	
-		// If all digits are '0', ensure number is "0"
-		this.number = (beg == number.length()) ? "0" : number.substring(beg);
-	
-		
-		if (this.number.isEmpty()) { // replace empty strings with a single zero
-			this.number = "0";
-		}
+		// Preserve the original string (including leading zeros)
+		this.number = number;
 	}
+	
 	/**
 	* Return the binary value of the variable
 	*
@@ -95,21 +82,21 @@ public class Binary
      * @return A new Binary object representing the result of the OR operation.
      */
     public static Binary or(Binary num1, Binary num2) {
-        // Ensure both binary strings are of the same length by padding with zeros.
-        String bin1 = padZeros(num1.number, num2.number.length());
-        String bin2 = padZeros(num2.number, num1.number.length());
-
-        StringBuilder result = new StringBuilder();
-
-        // Perform bitwise OR on each pair of digits.
-        for (int i = 0; i < bin1.length(); i++) {
-            char bit1 = bin1.charAt(i);
-            char bit2 = bin2.charAt(i);
-            result.append((bit1 == '1' || bit2 == '1') ? "1" : "0");
-        }
-
-        return new Binary(result.toString());
-    }
+		int maxLength = Math.max(num1.number.length(), num2.number.length());
+	
+		// Ensure both binary strings are of the same length by padding with zeros.
+		String bin1 = padZeros(num1.number, maxLength);
+		String bin2 = padZeros(num2.number, maxLength);
+	
+		StringBuilder result = new StringBuilder();
+	
+		// Perform bitwise OR on each pair of digits.
+		for (int i = 0; i < bin1.length(); i++) {
+			result.append((bin1.charAt(i) == '1' || bin2.charAt(i) == '1') ? "1" : "0");
+		}
+	
+		return new Binary(result.toString());  // Ensure Binary class does not strip leading zeros
+	}
 
     /**
      * Performs a bitwise AND operation on two Binary objects.
@@ -119,21 +106,21 @@ public class Binary
      * @return A new Binary object representing the result of the AND operation.
      */
     public static Binary and(Binary num1, Binary num2) {
-        // Ensure both binary strings are of the same length by padding with zeros.
-        String bin1 = padZeros(num1.number, num2.number.length());
-        String bin2 = padZeros(num2.number, num1.number.length());
-
-        StringBuilder result = new StringBuilder();
-
-        // Perform bitwise AND on each pair of digits.
-        for (int i = 0; i < bin1.length(); i++) {
-            char bit1 = bin1.charAt(i);
-            char bit2 = bin2.charAt(i);
-            result.append((bit1 == '1' && bit2 == '1') ? "1" : "0");
-        }
-
-        return new Binary(result.toString());
-    }
+		int maxLength = Math.max(num1.number.length(), num2.number.length());
+	
+		// Ensure both binary strings are of the same length by padding with zeros.
+		String bin1 = padZeros(num1.number, maxLength);
+		String bin2 = padZeros(num2.number, maxLength);
+	
+		StringBuilder result = new StringBuilder();
+	
+		// Perform bitwise AND on each pair of digits.
+		for (int i = 0; i < bin1.length(); i++) {
+			result.append((bin1.charAt(i) == '1' && bin2.charAt(i) == '1') ? "1" : "0");
+		}
+	
+		return new Binary(result.toString());  // Ensure Binary class does not strip leading zeros
+	}
 
     /**
      * Multiplies two Binary objects.
@@ -165,10 +152,11 @@ public class Binary
      * @return The padded binary string.
      */
     private static String padZeros(String binary, int length) {
-        while (binary.length() < length) {
-            binary = "0" + binary; // Prepend zeros until the length matches.
-        }
-        return binary;
-    }
+		while (binary.length() < length) {
+			binary = "0" + binary; // Prepend zeros
+		}
+		return binary;
+	}
+	
 	
 }
