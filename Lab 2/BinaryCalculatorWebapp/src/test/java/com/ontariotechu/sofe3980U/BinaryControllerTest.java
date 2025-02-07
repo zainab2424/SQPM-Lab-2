@@ -46,5 +46,20 @@ public class BinaryControllerTest {
 			.andExpect(model().attribute("result", "1110"))
 			.andExpect(model().attribute("operand1", "111"));
     }
+// Test Case 1: Sending a POST request to a GET-only endpoint
+    @Test
+    public void incorrectPostOperation() throws Exception {
+        this.mvc.perform(post("/add").param("operand1", "101").param("operand2", "10"))
+            .andExpect(status().isNotFound()); 
+    }
+
+    // Test Case 2: Sending POST request with invalid parameters 
+    @Test
+    public void postWithInvalidParameters() throws Exception {
+        this.mvc.perform(post("/multiply")
+                .contentType("application/json")
+                .content("{ \"operand1\": \"abc\", \"operand2\": \"1010\" }")) 
+            .andExpect(status().isNotFound()); 
+    }
 
 }
